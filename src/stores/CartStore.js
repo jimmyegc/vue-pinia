@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore, acceptHMRUpdate } from "pinia";
 import { groupBy } from "lodash";
 import { useAuthUserStore } from "./AuthStore";
 
@@ -6,6 +6,7 @@ export const useCartStore = defineStore("CartStore", {
   state: () => {
     return {
       items: [],
+      test: "hello world",
     };
   },
   getters: {
@@ -30,6 +31,7 @@ export const useCartStore = defineStore("CartStore", {
     },
     addItems(count, item) {
       count = parseInt(count);
+      //throw new Error("example error");
       for (let index = 0; index < count; index++) {
         this.items.push({ ...item });
       }
@@ -43,3 +45,8 @@ export const useCartStore = defineStore("CartStore", {
     },
   },
 });
+
+// make sure to pass the right store definition, `useAuth` in this case.
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useCartStore, import.meta.hot));
+}
